@@ -11,6 +11,29 @@ You can find more information in [out writeup](media/README.md).
 For even more technical information see our paper (TODO coming soon).
 
 
+# Performance
+
+Performance depends on what GPU you are using, size of the matrix and the density of the matrix.
+Tested on NVIDIA: 2080, 3090, 4090.
+In general, you should expect following results for consumer GPUs.
+
+fp16 values
+- 50% matrix density: 1.5x memory reduction, 1.3-1.5x speedup over cuBLAS
+- 10% matrix density: 6.25x memory reduction, 3.5-4.5x speedup over cuBLAS
+- Faster with smaller memory footprint compared to CSR format for all densities above 10\%.
+
+This translates directly to End2End LLM inference improvements.
+
+For Llama 2-7b model in fp16 pruned with wanda in unstructured mode
+- 50% density: Memory goes from 13.59GB to 8.87GB, tokens/sec from 66.53 to 98.60
+- 10% density: Memory goes from 13.59GB to 2.67GB, tokens/sec from 66.53 to 255.01
+
+You can find detailed benchmarks in [our writeup](media/README.md).
+MACKO format works across all GPUs and the memory reduction is the same.
+However, the SpMV algorithm is not tuned yet, and the performance may vary across GPUS.
+A special type of optimization is needed for server GPUs (H100, V100).
+
+
 # Usage
 
 Call `macko_spmv.compress` to compress your sparse matrix and `macko_spmv.multiply` to perform SpMV.
@@ -41,28 +64,6 @@ Compatible with torch tensors and torch compilation.
 See `tests/test_macko_spmv.py` for more advanced usage.
 
 
-# Performance
-
-Performance depends on what GPU you are using, size of the matrix and the density of the matrix.
-In general, you should expect following results for consumer GPUs (tested on NVIDIA 2080, 3090, 4090).
-
-fp16 values
-- 50% matrix density: 1.5x memory reduction, 1.3-1.5x speedup over cuBLAS
-- 10% matrix density: 6.25x memory reduction, 3.5-4.5x speedup over cuBLAS
-- Faster with smaller memory footprint compared to CSR format for all densities above 10\%.
-
-This translates directly to End2End LLM inference improvements.
-
-For Llama 2-7b model in fp16 pruned with wanda in unstructured mode
-- 50% density: Memory goes from 13.59GB to 8.87GB, tokens/sec from 66.53 to 98.60
-- 10% density: Memory goes from 13.59GB to 2.67GB, tokens/sec from 66.53 to 255.01
-
-You can find detailed benchmarks in [our writeup](media/README.md).
-MACKO format works across all GPUs and the memory reduction is the same.
-However, the SpMV algorithm is not tuned yet, and the performance may vary across GPUS.
-A special type of optimization is needed for server GPUs (H100, V100).
-
-
 # Setup
 
 You can directly install this repository using `pip` thanks to `pyproject.toml`.
@@ -70,16 +71,6 @@ You can directly install this repository using `pip` thanks to `pyproject.toml`.
 This library compiles it's cuda kernels on the fly using `torch.load_inline`.
 Including this library for the first time can take a minute.
 To prevent recompilation, set `MACKO_SPMV_BUILD_DIRECTORY` environment variable.
-
-
-# Useful commands
-
-- Compile the benchmarking kernel (you can also add  `-arch=sm_<your gpu>`): `nvcc -O3   benchmark.cu -o benchmark -lcublas -lcusparse --resource-usage`
-- Profile code: `sudo /usr/local/cuda/bin/ncu -f --set full -o profiles/benchmark ./benchmark 4096 4096 0 0 1 0 7 47 0.5`
-- Set GPU compute frequency: `sudo nvidia-smi -i 0 -lgc 1800,1800`
-- Reset GPU compute frequency: `sudo nvidia-smi -i 0 -rgc`
-- Query real time GPU stats: `nvidia-smi --query-gpu=index,timestamp,power.draw,clocks.sm,clocks.mem,clocks.gr,memory.used --format=csv -l 1`
-- Get gpu name: `nvidia-smi --query-gpu=name --format=csv,noheader | tr ' ' '_'`
 
 
 # Instructions for End2End model

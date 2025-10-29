@@ -32,3 +32,13 @@ This is incompatible with `transformers>=4.56.0`
 
 - benchmark (un)compressed model
     - `python python_scripts/util_run_pruned_llm.py /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4 /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4_compressed --make_sparse=1 | tee run_d0.4_sparse.txt`
+
+
+# Useful commands
+
+- Compile the benchmarking kernel (you can also add  `-arch=sm_<your gpu>`): `nvcc -O3   benchmark.cu -o benchmark -lcublas -lcusparse --resource-usage`
+- Profile code: `sudo /usr/local/cuda/bin/ncu -f --set full -o profiles/benchmark ./benchmark 4096 4096 0 0 1 0 7 47 0.5`
+- Set GPU compute frequency: `sudo nvidia-smi -i 0 -lgc 1800,1800`
+- Reset GPU compute frequency: `sudo nvidia-smi -i 0 -rgc`
+- Query real time GPU stats: `nvidia-smi --query-gpu=index,timestamp,power.draw,clocks.sm,clocks.mem,clocks.gr,memory.used --format=csv -l 1`
+- Get gpu name: `nvidia-smi --query-gpu=name --format=csv,noheader | tr ' ' '_'`

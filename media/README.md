@@ -62,6 +62,12 @@ Trust me, it will be ok. Lets first see the multiplication algorithm.
 TODO visual representation of MACKO
 
 
+## SpMV algorithm
+
+TODO visual representation of algorithm
+TODO description of algorithm
+
+
 ## Padding analysis
 
 ### Best case
@@ -146,12 +152,6 @@ Some interesting points:
 - MACKO improves over dense representation slightly below $d=0.8$
 - MACKO reaches $d_{eff}=0.5$ at $d=0.4$ for expected and best case and at $d=0.35$ for the worst case.
 - CSR with $16$ bit column indices matches MACKO at $d=0.04$ for the best case and $d=0.1$ for the worst case.
-
-
-## SpMV algorithm
-
-TODO visual representation of algorithm
-TODO description of algorithm
 
 
 ## SpMV benchmarks
