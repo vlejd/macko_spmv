@@ -1,0 +1,19 @@
+Name: NVIDIA GeForce RTX 2080 SUPER
+Compute capability: 7.5
+Max grid size: (2147483647, 65535, 65535)
+Max block size: 1024
+Number of SMs: 48
+Clock rate of the SMs (in kHz): 1830000
+Max threads dimension: (1024, 1024, 64)
+Max threads per SM: 1024
+Registers available per block: 65536
+Registers available per SM: 65536
+Warp size (threads per warp): 32
+Shared memory size per block: 49 Kbytes
+Shared memory size per SM: 65 Kbytes
+L2 cache size: 4.19 Mbytes
+Memory bus width: 256 bits
+Memory clock rate: 7751 MHz
+
+Theoretical Max GFLOPS: 22487.04
+Maximum Memory Bandwidth (GB/s): 496.06

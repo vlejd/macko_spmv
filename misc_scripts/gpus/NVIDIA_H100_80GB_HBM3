@@ -1,0 +1,19 @@
+Name: NVIDIA H100 80GB HBM3
+Compute capability: 9.0
+Max grid size: (2147483647, 65535, 65535)
+Max block size: 1024
+Number of SMs: 132
+Clock rate of the SMs (in kHz): 1980000
+Max threads dimension: (1024, 1024, 64)
+Max threads per SM: 2048
+Registers available per block: 65536
+Registers available per SM: 65536
+Warp size (threads per warp): 32
+Shared memory size per block: 49 Kbytes
+Shared memory size per SM: 233 Kbytes
+L2 cache size: 52.43 Mbytes
+Memory bus width: 5120 bits
+Memory clock rate: 2619 MHz
+
+Theoretical Max GFLOPS: 66908.16
+Maximum Memory Bandwidth (GB/s): 3352.32

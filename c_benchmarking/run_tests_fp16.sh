@@ -1,0 +1,1 @@
+bash run_tests.sh 16 "2 3 7"

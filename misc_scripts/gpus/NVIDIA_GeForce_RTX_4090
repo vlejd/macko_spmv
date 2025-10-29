@@ -1,0 +1,19 @@
+Name: NVIDIA GeForce RTX 4090
+Compute capability: 8.9
+Max grid size: (2147483647, 65535, 65535)
+Max block size: 1024
+Number of SMs: 128
+Clock rate of the SMs (in kHz): 2520000
+Max threads dimension: (1024, 1024, 64)
+Max threads per SM: 1536
+Registers available per block: 65536
+Registers available per SM: 65536
+Warp size (threads per warp): 32
+Shared memory size per block: 49 Kbytes
+Shared memory size per SM: 102 Kbytes
+L2 cache size: 75.50 Mbytes
+Memory bus width: 384 bits
+Memory clock rate: 10501 MHz
+
+Theoretical Max GFLOPS: 82575.36
+Maximum Memory Bandwidth (GB/s): 1008.10

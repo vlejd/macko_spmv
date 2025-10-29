@@ -1,0 +1,1 @@
+bash run_tests.sh 8 "8"

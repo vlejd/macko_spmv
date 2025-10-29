@@ -1,0 +1,19 @@
+Name: NVIDIA GeForce RTX 3090
+Compute capability: 8.6
+Max grid size: (2147483647, 65535, 65535)
+Max block size: 1024
+Number of SMs: 82
+Clock rate of the SMs (in kHz): 1695000
+Max threads dimension: (1024, 1024, 64)
+Max threads per SM: 1536
+Registers available per block: 65536
+Registers available per SM: 65536
+Warp size (threads per warp): 32
+Shared memory size per block: 49 Kbytes
+Shared memory size per SM: 102 Kbytes
+L2 cache size: 6.29 Mbytes
+Memory bus width: 384 bits
+Memory clock rate: 9751 MHz
+
+Theoretical Max GFLOPS: 35581.44
+Maximum Memory Bandwidth (GB/s): 936.10
