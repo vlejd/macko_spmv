@@ -65,7 +65,26 @@ TODO visual representation of MACKO
 ## SpMV algorithm
 
 TODO visual representation of algorithm
-TODO description of algorithm
+
+MACKO-SpMV builds upon Splitk GEMV. There are 3 key insights that are necessary to make this algorithm work.
+This algorithm assigns one warp to each row of matrix $M$ and each warp is responsible to compute the dot product of $V$ and one row $M_r$.
+To make this algorithm efficient, we just need to perform all memory loading to be coalesced, aligned and large enough to efficiently make use of the cache line.
+
+**First insight**: after warp loads consecutive chunks of values from $M$ and deltas, threads in the warp can efficiently reconstruct the column indices based on loaded deltas.
+To reconstruct the indices, threads compute prefix sums of deltas using `__shfl_sync` cuda primitive.
+We can compute the whole prefix sum across the whole warp in only 5 instructions.
+Afterwards, the last thread holds the sum of all deltas in the current warp.
+We broadcast this value across all threads and continue with the next chunks of deltas and values.
+
+**Second insight** : `deltas` and `values` can be load in a way tha is efficient, and aligned.
+If we load 128-bytes worth of deltas, and 512-bytes worth of values, each thread will load exactly 8 `deltas` and corresponding 8 `values` and no further communication or memory access is needed.
+
+**Third insight**: even though rows can have an arbitrary number of elements, we can still perform proper vectorized memory access.
+We just need to allow warp to potentially read part of the row.
+This can be easily solved by masking the loaded values.
+
+After each thread reconstructs the column indices, we read corresponding entries from $V$ and compute the dot product.
+Finally, after warp processes the whole row, we aggregate the partial dot products across warp threads and store them in the result matrix.
 
 
 ## Padding analysis
