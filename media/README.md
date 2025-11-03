@@ -198,13 +198,17 @@ Benchmarking SpMV is notoriously tricky and high dimensional. Results can vary a
 
 Here we show results for NVIDIA GeForce RTX 4090 for small 4096x4096 matrices, and across all shapes in our dataset.
 
-![fp16 NVIDIA GeForce RTX 4090, 4096x4096 relative speedup](../media/fp16_NVIDIA_GeForce_RTX_4090_4096_4096_relative_speedup.svg)
+![fp16 NVIDIA GeForce RTX 4090, 4096x4096 relative speedup](../media/fp16_NVIDIA_GeForce_RTX_4090_4096_4096_relative_speedup_bar.svg)
 
 ![NVIDIA GeForce RTX 4090 relative speedup all sizes](../media/NVIDIA_GeForce_RTX_4090_relative_speedup_all_sizes.svg)
 
+![NVIDIA GeForce RTX 3090 relative speedup all sizes](../media/NVIDIA_GeForce_RTX_3090_relative_speedup_all_sizes.svg)
+
+![NVIDIA GeForce RTX 2080 SUPER relative speedup all sizes](../media/NVIDIA_GeForce_RTX_2080_SUPER_relative_speedup_all_sizes.svg)
+
 Interesting points
 - MACKO improves over cuSPARSE across all sparsities between 0 and 90%. There are shapes for which cuSPARSE can be faster for sparsities above 95%.
-- MACKO improves over cuBLAS for sparsity above 30% in general, and for small matrices even above 20% (this is likely caused by cuBLAS not being optimized for this specific shape and GPU pair).
+- MACKO improves over cuBLAS for sparsity above 30% in general, and for some shapes even above 20% (this is likely caused by cuBLAS not being optimized for this specific shape and GPU pair).
 
 ## Benchmarking details
 
@@ -229,7 +233,9 @@ All matrices are stored in the GPU memory, but not cached.
 See benchmarking script for precise parameters of the baselines and other methodological details.
 In GPU benchmarking, trust nothing, only code is the source of truth.
 
-All data can be seen in the `./c_benchmarking/results_16bit/<GPU_NAME>/results.txt`.
+All data can be seen in the `./c_benchmarking/results_16bit/<GPU_NAME>/results.txt` and all graphs in the `media` directory.
+
+Raw data for some of the baselines (DASP, Sputnik) are in separate repositories.
 
 # End2End benchmarks
 

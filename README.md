@@ -22,15 +22,16 @@ fp16 values
 - 10% matrix density: 6.25x memory reduction, 3.5-4.5x speedup over cuBLAS
 - Faster with smaller memory footprint compared to CSR format for all densities above 10%.
 
-This translates directly to End2End LLM inference improvements.
+This translates directly to End2End LLM inference.
 
 For Llama 2-7b model in fp16 pruned with wanda in unstructured mode
 - 50% density: Memory goes from 13.59GB to 8.87GB, tokens/sec from 66.53 to 98.60
 - 10% density: Memory goes from 13.59GB to 2.67GB, tokens/sec from 66.53 to 255.01
 
 You can find detailed benchmarks in [our writeup](media/README.md).
+See `media` directory for extensive number of graphs.
 MACKO format works across all GPUs and the memory reduction is the same.
-However, the SpMV algorithm is not tuned yet, and the performance may vary across GPUS.
+However, the SpMV algorithm is not tuned yet and the performance may vary across GPUS.
 A special type of optimization is needed for server GPUs (H100, V100).
 
 
