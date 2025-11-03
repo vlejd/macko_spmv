@@ -44,10 +44,44 @@ This is incompatible with `transformers>=4.56.0`
 - Get gpu name: `nvidia-smi --query-gpu=name --format=csv,noheader | tr ' ' '_'`
 
 
-# Baseline
+# Full SpMV evaluation
 
-Dasp
-- `nvcc -O3 src/main_f16.cu -o spmv_half -arch=sm_75 -lineinfo -lcusparse -lcublas`
-- use `gen_mtx_matrices.ipynb` to generate testing data
-- run `for f in ../matrices/* ; do echo $f ; ./spmv_half $f ; done`
-- parse the result
+- `git clone https://github.com/vlejd/macko_spmv.git ; cd macko_spmv/c_benchmarking`
+- `nvcc -O3 benchmark.cu -o benchmark -gencode arch=compute_75,code=sm_75 -gencode arch=compute_86,code=sm_86 -gencode arch=compute_89,code=sm_89 -lcublas -lcusparse --resource-usage`
+- Test one size: `./benchmark 16 4096 4096 100 1000 1 0 7 47 0.5`
+- Run all tests: `bash run_tests_fp16.sh`
+
+# SpMV Baselines
+
+**Dasp**
+- `git clone https://github.com/vlejd/DASP.git ; cd DASP`
+- Compile: `nvcc -O3 src/main_f16.cu -o spmv_half -gencode arch=compute_75,code=sm_75 -gencode arch=compute_86,code=sm_86 -gencode arch=compute_89,code=sm_89 -lineinfo -lcusparse -lcublas`
+- Test one size: `./spmv_half 4096 4096 0.5`
+- Run all tests: `bash run_tests.sh`
+- Results are in `dasp_results_16bit` directory
+
+**Sputnik**
+- `git clone https://github.com/vlejd/SpInfer.git; cd SpInfer`
+
+- Install (a little more involved) 
+    ```bash
+    git submodule update --init --recursive
+    source Init_SpInfer.sh
+    cd $SpInfer_HOME/third_party/sputnik && git apply ../sputnik.patch
+    cd $SpInfer_HOME/build && make -j
+    cd $SpInfer_HOME/third_party/
+    source build_sputnik.sh
+
+    cd $SpInfer_HOME/third_party/
+    source preparse_cusparselt.sh
+
+    cd $SpInfer_HOME/kernel_benchmark
+    source test_env
+    make -j spmm_test_sputnik
+    ```
+- Test one size: `./spmm_test_sputnik 4096 4096 1 50 1`
+- Run all tests
+    ```bash
+    cd $SpInfer_HOME/kernel_benchmark
+    bash run_sputnik.sh
+    ```
