@@ -1,7 +1,7 @@
 #include <cuda_runtime.h>
 #include <cublas_v2.h>
 
-#define BLOCK_SIZE 32
+#define BLOCK_SIZE 8
 #define UPDIV(a, b) (a + b - 1) / b
 #define WARP_SIZE 32
 #define FULL_MASK 0xffffffff
