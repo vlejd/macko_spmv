@@ -1,0 +1,10 @@
+"llama 2-7b fp16, wanda unstructured pruning, empty prompt, average 30 runs with 100 tokens generated, RTX 4090",,,,,,,
+Density,Dense peak memory size [GB],Sparse peak memory size [GB],Sparse relative memory difference [%],Dense relative memory difference [%],Dense speed [tokens/sec],Sparse speed [tokens/sec],Sparse relative speedup [%]
+0.80,13.59,13.77,1.30,-1.28,66.55,66.36,-0.29
+0.70,13.59,12.08,-11.14,12.53,66.49,73.88,11.11
+0.60,13.59,10.53,-22.50,29.03,66.48,85.46,28.55
+0.50,13.59,8.87,-34.74,53.23,66.53,98.60,48.20
+0.40,13.59,7.14,-47.43,90.22,66.51,119.27,79.33
+0.30,13.59,5.61,-58.71,142.19,66.50,150.78,126.74
+0.20,13.59,4.06,-70.10,234.47,66.54,193.79,191.24
+0.10,13.59,2.67,-80.37,409.51,66.48,255.01,283.59
