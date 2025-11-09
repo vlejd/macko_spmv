@@ -7,7 +7,10 @@ These sparsities were historically very hard to make use of in practice, because
 We hope this library will help to spark more interest in the field of neural network pruning and find uses outside it as well.
 Debate whether quantization is better than pruning is beyond the scope of this work, but we hope we will help to bridge the gap.
 
-For even more technical information see our paper (TODO coming soon).
+For even more technical information see our paper (TODO coming soon). Here, we will go through the main ideas and results in an in-depth but more relaxed manner.
+
+First we will go through some background, then see the format and algorithm design, analyze why it is good, and then see some results.
+Headsup, this writing will still assume some very specific, and potentially obscure GPU knowledge. Feel free to raise an issue in our github.
 
 
 ## Background, CSR baseline
@@ -23,6 +26,9 @@ The biggest problem of CSR in SpMV is the memory overhead it incures because of 
 `column_indices` are even more dominant if `values` are low precision (16-bit or less).
 SpMV is a memory bound operation, and this memory overhead directly translates to slower runtime.
 
+Why? Well SpMV needs to perform about 1 operation per 1 byte of accessed memory (ask chatgpt). 
+Modern GPUs can perform a lot of operations in the same time in which they can read 1 byte (38-80 for consumer GPUs, all the way to 100 for server GPUs, just divide the FLOPS with memory bandwidth).
+
 We need to design a format that does not have unnecesery memory overhead, but still respects constrains for efficient GPU execution.
 
 TODO visual representation of CSR
@@ -30,7 +36,7 @@ TODO visual representation of CSR
 
 ## Background, SpMV
 
-**Sp**arse **M**atrix **V**ector multiplication computes $Y=MV$, whre $M$ is a sparse matrix, and $V$ is a dense column vector.
+**Sp**arse **M**atrix **V**ector multiplication computes $Y=MV$, whre $M$ is a sparse matrix, and $V$ and $Y$ are dense column vector.
 Common simplification of this problem is to impose some structure on $M$, like 2:4 sparsity, N:M sparsity, or block sparsity.
 In a our case, there are no contraints on the structure of $M$. 
 
@@ -263,6 +269,13 @@ For density 50%, we see a significatn 1.5x reduction in memory and 1.5x increase
 Finally, these improvements hold all the way to density 10%, where we see 5x memory reduction and 4x speedup.
 
 If you want to reproduce End2End inference results, follow [technical instructions](../TECHNICAL_README.md).
+
+# Conclusion
+
+We managed to break a mytical boundary of 50% unstructured sparsity and showed, that with proper format and kernel it leads to practical memory reduction and speedups.
+
+We hope this work will spark more interest in unstructured pruning, and helps to make sparsity more viable alternative to quantization. 
+
 
 # Afterword
 

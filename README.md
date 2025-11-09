@@ -23,7 +23,6 @@ fp16 values
 - Faster with smaller memory footprint compared to CSR format for all densities above 10%.
 
 This translates directly to End2End LLM inference.
-
 For Llama 2-7b model in fp16 pruned with wanda in unstructured mode
 - 50% density: Memory goes from 13.59GB to 8.87GB, tokens/sec from 66.53 to 98.60
 - 10% density: Memory goes from 13.59GB to 2.67GB, tokens/sec from 66.53 to 255.01
@@ -53,10 +52,8 @@ M[M<0.5] = 0.
 # Compress it to MACKO format
 compressed_M = macko_spmv.compress(M)
 
-Y = macko_spmv.multiply(compressed_M, V)
-
-print(Y)
-print(M@Y)
+print(macko_spmv.multiply(compressed_M, V))
+print(M@V)
 ```
 
 Note: this library compiles cuda kernels on first import. The first run may take a while.
@@ -84,6 +81,10 @@ This process is more involved, please refer to [technical readme](TECHNICAL_READ
 If you use this library, please cite the following paper:
 __ TODO Paper coming soon__.
 
+We will also apreciate some kind words about it to github issues, hacker news, Yannic Kilcher, two minute papers, discord, linkedin, x, tikto, instagram, mastodont, reddit, 4chan, your investors newsletter, your loved ones or whoever you think would find it interesting.
+
+We are a very small team from very little known university, every good promo helps :).
+
 
 # Authors
 
@@ -91,11 +92,22 @@ __ TODO Paper coming soon__.
 - Vladimír Boža: Comenius University, Bratislava, Slovakia
 
 
+# Acknowledgement
+
+This work would not be possible without the following resources:
+- GPU MODE community, https://discord.gg/pqm9sJgD . This is hands down the best set of resources regarding GPU programming.
+- Simon Boehm with his amazing blog: https://siboehm.com/articles/22/CUDA-MMM . This is a must read if you want to do anything regarding matrix multiplication.
+- Lei Mao and all his blogs, especially: https://leimao.github.io/article/CUDA-Matrix-Multiplication-Optimization/
+- Very nice visual blog about cuda benchmarking: https://www.speechmatics.com/company/articles-and-news/timing-operations-in-pytorch
+- Another very nice blog about cuda benchmarking: https://guillesanbri.com/CUDA-Benchmarks/
+- Vast.ai: the most convenient way to just get a random gpu for a few hours and develop some fast kernels. You are one `ncu` support away from perfection.
+
+
 # Contributions
 
 Contributions are welcome!
 
-Current challenges
+Current challenges:
 
 - Support more data types (bfloat16, fp8, int8, float32) in a maintainable way
 - Torch batch routing
