@@ -7,7 +7,7 @@ These sparsities were historically very hard to make use of in practice, because
 We hope this library will help to spark more interest in the field of neural network pruning and find uses outside it as well.
 Debate whether quantization is better than pruning is beyond the scope of this work, but we hope we will help to bridge the gap.
 
-You can find more information on [our blog](media/README.md).
+You can find more information on [our blog](https://grizzlytech.dev/blog/macko-spmv).
 For even more technical information see our [paper](https://arxiv.org/pdf/2511.13061).
 
 
@@ -27,7 +27,7 @@ For Llama 2-7b model in fp16 pruned with wanda in unstructured mode
 - 50% density: Memory goes from 13.59GB to 8.87GB, tokens/sec from 66.53 to 98.60
 - 10% density: Memory goes from 13.59GB to 2.67GB, tokens/sec from 66.53 to 255.01
 
-You can find detailed benchmarks in [our blog](media/README.md).
+You can find detailed benchmarks in [our blog](https://grizzlytech.dev/blog/macko-spmv).
 See `media` directory for extensive number of graphs.
 MACKO format works across all GPUs and the memory reduction is the same.
 However, the SpMV algorithm is not tuned yet and the performance may vary across GPUS.
@@ -100,7 +100,7 @@ This work would not be possible without the following resources:
 - Lei Mao and all his blogs, especially: https://leimao.github.io/article/CUDA-Matrix-Multiplication-Optimization/
 - Very nice visual blog about cuda benchmarking: https://www.speechmatics.com/company/articles-and-news/timing-operations-in-pytorch
 - Another very nice blog about cuda benchmarking: https://guillesanbri.com/CUDA-Benchmarks/
-- Vast.ai: the most convenient way to just get a random gpu for a few hours and develop some fast kernels. You are one `ncu` support away from perfection.
+- [Vast.ai](https://vast.ai/): the most convenient way to just get a random gpu for a few hours and develop some fast kernels. You are one `ncu` support away from perfection.
 
 
 # Contributions

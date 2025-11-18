@@ -12,7 +12,7 @@ For even more technical information see our [paper](https://arxiv.org/pdf/2511.1
 The code is available on [github](https://github.com/vlejd/macko_spmv).
 
 First we will go through some background, then see the format and algorithm design, analyze why it is good, and then see some results.
-Headsup, this writing may still assume some very specific, and potentially obscure GPU knowledge. Feel free to raise an issue in our github.
+Heads up, this writing may still assume some very specific, and potentially obscure GPU knowledge. Feel free to raise an issue in our github.
 
 This is how good the kernel is. Runtime of SpMV for size 36864, 12288 in fp16 on an NVIDIA GeForce RTX 4090 GPU.
 The improvement of this work is displayed as highlighted region.
@@ -162,7 +162,7 @@ For example now the break even point is at $d=0.75$ which is still very good.
 
 ### Average case
 
-What about the average case? Let's say we have a matrix $M$ whose each element has probability $d$ of not being a zero.
+What about the average case? Let's say we have a matrix $M$ who's each element has probability $d$ of not being a zero.
 This is not the same as having density $d$, but it is close enough.
 
 It is like playing a game with an unfair coin that has probability $d$ of head and $1-d$ of tail.
@@ -273,7 +273,7 @@ For density 50%, we see a significant 1.5x reduction in memory and 1.5x increase
 
 Finally, these improvements hold all the way to density 10%, where we see 5x memory reduction and 4x speedup.
 
-If you want to reproduce End2End inference results, follow [technical instructions](../TECHNICAL_README.md).
+If you want to reproduce End2End inference results, follow [technical instructions](https://github.com/vlejd/macko_spmv/blob/master/TECHNICAL_README.md).
 
 # Conclusion
 
