@@ -10,6 +10,7 @@ Debate whether quantization is better than pruning is beyond the scope of this w
 You can find more information on [our blog](https://grizzlytech.dev/blog/macko-spmv).
 For even more technical information see our [paper](https://arxiv.org/pdf/2511.13061).
 
+![format](media/Macko_format.svg)
 
 # Performance
 
@@ -32,6 +33,9 @@ See `media` directory for extensive number of graphs.
 MACKO format works across all GPUs and the memory reduction is the same.
 However, the SpMV algorithm is not tuned yet and the performance may vary across GPUS.
 A special type of optimization is needed for server GPUs (H100, V100).
+
+![Speedup](media/NVIDIA_GeForce_RTX_4090_gain_over_baselines.svg)
+
 
 # Installation
 
