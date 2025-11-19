@@ -33,6 +33,36 @@ MACKO format works across all GPUs and the memory reduction is the same.
 However, the SpMV algorithm is not tuned yet and the performance may vary across GPUS.
 A special type of optimization is needed for server GPUs (H100, V100).
 
+# Installation
+
+This repo uses python 3.12, but should work across most versions.
+Normally we use `uv`, but you can use whatever virtual env you want.
+
+Basic usage
+```
+git clone https://github.com/vlejd/macko_spmv.git
+cd macko_spmv
+pip install .
+```
+
+If you want to run tests:
+
+```
+pip install '.[test]'
+```
+
+If you want to run end2end LLM stuff or make some graphs:
+
+```
+pip install '.[dev]'
+```
+
+If you use `uv`
+```
+uv sync --extra test
+uv run pytest
+```
+
 
 # Usage
 

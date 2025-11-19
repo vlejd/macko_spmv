@@ -623,43 +623,42 @@ dependencies = [
     { name = "transformers" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 dev = [
     { name = "fire" },
     { name = "ipykernel" },
     { name = "jinja2" },
     { name = "matplotlib" },
     { name = "pandas" },
-    { name = "pytest" },
     { name = "scipy" },
     { name = "seaborn" },
     { name = "shapely" },
     { name = "tabulate" },
     { name = "tqdm" },
 ]
+test = [
+    { name = "pytest" },
+]
 
 [package.metadata]
 requires-dist = [
     { name = "accelerate", specifier = ">=1.11.0" },
+    { name = "fire", marker = "extra == 'dev'", specifier = ">=0.7.1" },
+    { name = "ipykernel", marker = "extra == 'dev'", specifier = ">=7.1.0" },
+    { name = "jinja2", marker = "extra == 'dev'", specifier = ">=3.1.6" },
+    { name = "matplotlib", marker = "extra == 'dev'", specifier = ">=3.10.7" },
     { name = "numpy", specifier = ">=2.3.4" },
+    { name = "pandas", marker = "extra == 'dev'", specifier = ">=2.3.3" },
+    { name = "pytest", marker = "extra == 'test'", specifier = ">=8.4.2" },
+    { name = "scipy", marker = "extra == 'dev'", specifier = ">=1.16.3" },
+    { name = "seaborn", marker = "extra == 'dev'", specifier = ">=0.13.2" },
+    { name = "shapely", marker = "extra == 'dev'", specifier = ">=2.1.2" },
+    { name = "tabulate", marker = "extra == 'dev'", specifier = ">=0.9.0" },
     { name = "torch", specifier = "==2.8.0" },
+    { name = "tqdm", marker = "extra == 'dev'", specifier = ">=4.67.1" },
     { name = "transformers", specifier = "==4.55" },
 ]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "fire", specifier = ">=0.7.1" },
-    { name = "ipykernel", specifier = ">=7.1.0" },
-    { name = "jinja2", specifier = ">=3.1.6" },
-    { name = "matplotlib", specifier = ">=3.10.7" },
-    { name = "pandas", specifier = ">=2.3.3" },
-    { name = "pytest", specifier = ">=8.4.2" },
-    { name = "scipy", specifier = ">=1.16.3" },
-    { name = "seaborn", specifier = ">=0.13.2" },
-    { name = "shapely", specifier = ">=2.1.2" },
-    { name = "tabulate", specifier = ">=0.9.0" },
-    { name = "tqdm", specifier = ">=4.67.1" },
-]
+provides-extras = ["dev", "test"]
 
 [[package]]
 name = "markupsafe"
