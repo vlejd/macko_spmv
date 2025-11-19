@@ -39,7 +39,7 @@ This repo uses python 3.12, but should work across most versions.
 Normally we use `uv`, but you can use whatever virtual env you want.
 
 Basic usage
-```
+```bash
 git clone https://github.com/vlejd/macko_spmv.git
 cd macko_spmv
 pip install .
@@ -47,19 +47,19 @@ pip install .
 
 If you want to run tests:
 
-```
+```bash
 pip install '.[test]'
 ```
 
 If you want to run end2end LLM stuff or make some graphs:
 
-```
+```bash
 pip install '.[dev]'
 ```
 
 If you use `uv`
-```
-uv sync --extra test
+```bash
+uv sync --extra dev --extra test
 uv run pytest
 ```
 
@@ -68,12 +68,12 @@ uv run pytest
 
 Call `macko_spmv.compress` to compress your sparse matrix and `macko_spmv.multiply` to perform SpMV.
 
-```
+```python
 import macko_spmv
 import torch
 
 # Make some random matrix M and random vector V
-M = torch.rand((4096, 8192), dtype=torch.float16, device="cuda")
+M = torch.rand((8192, 8192), dtype=torch.float16, device="cuda")
 V = torch.rand((8192,), dtype=torch.float16, device="cuda")
 
 # Make The matrix sparse
@@ -82,9 +82,30 @@ M[M<0.5] = 0.
 # Compress it to MACKO format
 compressed_M = macko_spmv.compress(M)
 
-print(macko_spmv.multiply(compressed_M, V))
-print(M@V)
+# Run it
+print("MACKO output:", macko_spmv.multiply(compressed_M, V))
+print("Torch output:", M@V)
+
+# Profile it
+for _ in range(10): # Torch needs a little warmup
+    M @ V
+torch.cuda.synchronize()
+
+with torch.autograd.profiler.profile(use_device = 'cuda') as prof:
+    for _ in range(100):
+        y = M@V
+
+print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
+
+
+with torch.autograd.profiler.profile(use_device = 'cuda') as prof:
+    for _ in range(100):
+        y = macko_spmv.multiply(compressed_M, V)
+
+print(prof.key_averages().table(sort_by="cuda_time_total", row_limit=10))
 ```
+
+Run this and you should see clear speedup on all consumer GPUs. 
 
 Note: this library compiles cuda kernels on first import. The first run may take a while.
 
@@ -118,7 +139,7 @@ We are a very small team, every good promo helps :).
 
 # Authors
 
-- Vladimir Macko: GrizzlyTech.dev; Comenius University, Bratislava, Slovakia, 
+- Vladimír Macko: GrizzlyTech.dev; Comenius University, Bratislava, Slovakia, 
 - Vladimír Boža: Comenius University, Bratislava, Slovakia
 
 
@@ -149,4 +170,5 @@ Current challenges:
 If you want to collaborate and can write GEMV that matches/beats cuBLAS on H100 GPU,
 or if you have access to H100 with enabled profiling, please reach out.
 
-Discord: @vlejd
+Discord: [@vlejd](https://discord.com/users/444267838140579840/)
+x.com: [@vlejd](https://x.com/vlejd) and [@bozavlado](https://x.com/bozavlado)
