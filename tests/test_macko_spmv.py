@@ -47,18 +47,17 @@ def test_comressor_fp16_manual():
         # fmt: off
         expected_values = torch.tensor([
             0.5498, 0.7124, 0.7998, 0.1611, 0.0000, 0.4663, 0.2241, 0.6528, 0.4761,
-            0.4673, 0.0000, 0.0166, 0.1958, 0.0000, 0.5195, 0.5762, 0.8965, 0.5625,
-            0.2041, 0.8770, 0.1123, 0.4966, 0.5132, 0.0000
-        ], dtype=torch.float16, device=device)
+            0.4673, 0.0000, 0.0166, 0.1958, 0.5195, 0.5762, 0.8965, 0.5625, 0.2041,
+            0.8770, 0.1123, 0.4966, 0.5132, 0.0000, 0.0000], dtype=torch.float16, device=device)
         # fmt: on
 
         expected_deltas = torch.tensor(
-            [0, 54, 15, 0, 76, 95, 245, 4, 81, 41, 1, 1],
+            [0, 54, 15, 0, 76, 95, 69, 16, 149, 18, 16, 0],
             dtype=torch.uint8,
             device=device,
         )
         expected_row_indices = torch.tensor(
-            [0, 6, 10, 12, 14, 23], device=device, dtype=torch.int32
+            [0, 6, 10, 12, 13, 22], device=device, dtype=torch.int32
         )
 
         compressed_M = macko_spmv.compress(M)
@@ -68,6 +67,40 @@ def test_comressor_fp16_manual():
         assert torch.allclose(compressed_M[2], expected_row_indices)
         assert compressed_M[3] == SAMPLE_MATRIX_ROWS
         assert compressed_M[4] == SAMPLE_MATRIX_COLS
+
+
+def test_comressor_fp16_manual_empty():
+    for device in ["cpu", "cuda"]:
+        M = (
+            torch.tensor(
+                [[0] * 32, [0] * 31 + [1], [0, 2] + [0] * 30],
+                device="cpu",
+                dtype=torch.float16,
+            )
+            .clone()
+            .to(device)
+        )
+
+        # fmt: off
+        expected_values = torch.tensor([0,1,2,0,0,0,0,0], dtype=torch.float16, device=device)
+        # fmt: on
+
+        expected_deltas = torch.tensor(
+            [255, 1, 0, 0],
+            dtype=torch.uint8,
+            device=device,
+        )
+        expected_row_indices = torch.tensor(
+            [0, 0, 2, 3], device=device, dtype=torch.int32
+        )
+
+        compressed_M = macko_spmv.compress(M)
+        assert len(compressed_M) == 5
+        assert torch.allclose(compressed_M[0], expected_values)
+        assert torch.allclose(compressed_M[1], expected_deltas)
+        assert torch.allclose(compressed_M[2], expected_row_indices)
+        assert compressed_M[3] == 3
+        assert compressed_M[4] == 32
 
 
 def test_spmv_manual():
