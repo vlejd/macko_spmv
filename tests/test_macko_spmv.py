@@ -130,7 +130,7 @@ def run_test(M_rows, M_cols, density, seed):
 def test_spmv_random():
     M_rows = 4096
     M_cols = 2 * 4096
-    for density in (1.0, 0.5, 0.1, 0.01):
+    for density in (1.0, 0.5, 0.1, 0.01, 0.001, 0):
         for seed in range(2):
             run_test(M_rows, M_cols, density, seed)
 
