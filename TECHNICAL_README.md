@@ -27,8 +27,8 @@ This is incompatible with `transformers>=4.56.0`
     - `source .venv/bin/activate`
     - test inside python directory: `pytest test_macko_spmv.py`
 
-- compress model (4 min for 20 workers)
-    - `python python_scripts/util_compress_llm.py /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4/ 20`
+- compress model (4 min)
+    - `python python_scripts/util_compress_llm.py /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4/`
 
 - benchmark (un)compressed model
     - `python python_scripts/util_run_pruned_llm.py /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4 /workspace/pruned_models/llama_7b_unstructured_wanda_density_0.4_compressed --make_sparse=1 | tee run_d0.4_sparse.txt`
