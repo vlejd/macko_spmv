@@ -4,7 +4,6 @@ from transformers import AutoModelForCausalLM
 import torch
 from collections import OrderedDict
 import tqdm
-from multiprocessing import Pool
 
 
 def get_state_dict(model_path):
@@ -14,17 +13,7 @@ def get_state_dict(model_path):
     state_dict = model_dense.state_dict()
     return state_dict
 
-
-sd = None
-
-
-def worker_setup(model_path):
-    global sd
-    sd = get_state_dict(model_path)
-
-
-def compress_k(k):
-    global sd
+def compress_k(sd, k):
     v = sd[k]
     is_weight = ("weight" in k) and ("self_attn" in k or "mlp" in k)
     new_keys_values = []
@@ -40,22 +29,17 @@ def compress_k(k):
     return new_keys_values
 
 
-def compress(model_path, processes):
+def compress(model_path):
     model_path = model_path.rstrip("/")
     state_dict = get_state_dict(model_path)
     compressed_state_dict = OrderedDict()
 
-    with Pool(
-        processes=processes, initializer=worker_setup, initargs=(model_path,)
-    ) as pool:
-        print("Submitting")
-        new_keys_values = pool.imap_unordered(compress_k, state_dict.keys())
-
-        p = tqdm.tqdm(new_keys_values, total=len(state_dict))
-        for chunk in p:
-            for k, v in chunk:
-                p.set_description(f"{k}")
-                compressed_state_dict[k] = v
+    p = tqdm.tqdm(sorted(state_dict.keys()), total = len(state_dict))
+    for x in p:
+        chunk = compress_k(state_dict, x)
+        for k, v in chunk:
+            p.set_description(f"{k}")
+            compressed_state_dict[k] = v
 
     torch.save(compressed_state_dict, model_path + "_compressed")
 
