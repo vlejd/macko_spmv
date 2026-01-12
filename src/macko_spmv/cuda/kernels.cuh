@@ -61,24 +61,24 @@ __global__ void macko_spmv(
     {
         int thread_row_ordinal = warp_row_ordinal + lane * LOAD_SIZE;
         const float4 *M_values_vec = reinterpret_cast<const float4 *>(M_values);
-        const unsigned int *M_deltas_vec = reinterpret_cast<const unsigned int *>(M_deltas);
+        const ushort4 *M_deltas_vec = reinterpret_cast<const ushort4 *>(M_deltas);
 
         float4 m_values_raw = {0, 0, 0, 0};
-        unsigned int m_deltas_raw = {0};
+        ushort4 m_deltas_raw = {0, 0, 0, 0};
         if (thread_row_ordinal < row_end_ordinal)
         {
             m_values_raw = M_values_vec[thread_row_ordinal / LOAD_SIZE];
             m_deltas_raw = M_deltas_vec[thread_row_ordinal / LOAD_SIZE];
         }
         __half *m_values = reinterpret_cast<__half *>(&m_values_raw);
+        unsigned char *m_deltas = reinterpret_cast<unsigned char*>(&m_deltas_raw);
 
 #pragma unroll 8
         for (int i = 0; i < LOAD_SIZE; i++)
         {
             if (thread_row_ordinal + i < row_begin_ordinal)
             {
-                unsigned int delta_mask = ~(15 << (4 * i));
-                m_deltas_raw &= delta_mask;
+                m_deltas[i] = {0};
                 m_values[i] = {0};
             }
         }
@@ -87,7 +87,7 @@ __global__ void macko_spmv(
 #pragma unroll 8
         for (int i = 0; i < LOAD_SIZE; i++)
         {
-            sum_deltas += int((m_deltas_raw >> (4 * i)) & 15);
+            sum_deltas += int(m_deltas[i]);
         }
 
         sum_deltas_in_row += warp_exclusive_sum(sum_deltas);
@@ -98,7 +98,7 @@ __global__ void macko_spmv(
         {
             if (thread_row_ordinal + i >= vals_to_skip && thread_row_ordinal + i < row_end_ordinal)
             {
-                sum_deltas_in_row += int((m_deltas_raw >> (4 * i)) & 15);
+                sum_deltas_in_row += int(m_deltas[i]);
                 int real_delta = sum_deltas_in_row + thread_row_ordinal + i - row_begin_ordinal;
                 __half m_value = m_values[i];
                 real_delta = (real_delta >= M_cols) ? M_cols - 1 : real_delta;

@@ -245,10 +245,9 @@ void print_matrix(unsigned char *M, int M_rows, int M_cols)
     for (int r = 0; r < M_rows; r++)
     {
         cout << "[";
-        for (int c = 0; c < M_cols && c < max_size; c += 2)
+        for (int c = 0; c < M_cols && c < max_size; c++)
         {
-            cout << (int(M[r * M_cols + c/2]) & 15) << ", ";
-            cout << (int(M[r * M_cols + c/2]) >> 4) << ", ";
+            cout << (int(M[r * M_cols + c])) << ", ";
             if (c == max_size - 1)
             {
                 cout << "... \n";
@@ -528,8 +527,8 @@ public:
         cudaCheck(cudaMalloc((void **)&M_values_d, (M_sparse_padded_size) * sizeof(__half)));
         cudaCheck(cudaMemcpy(M_values_d, &(*M_values_h), (M_sparse_padded_size) * sizeof(__half), cudaMemcpyHostToDevice));
 
-        cudaCheck(cudaMalloc((void **)&M_deltas_d, (M_sparse_padded_size / 2) * sizeof(unsigned char)));
-        cudaCheck(cudaMemcpy(M_deltas_d, &(*M_deltas_h), (M_sparse_padded_size / 2) * sizeof(unsigned char), cudaMemcpyHostToDevice));
+        cudaCheck(cudaMalloc((void **)&M_deltas_d, (M_sparse_padded_size) * sizeof(unsigned char)));
+        cudaCheck(cudaMemcpy(M_deltas_d, &(*M_deltas_h), (M_sparse_padded_size) * sizeof(unsigned char), cudaMemcpyHostToDevice));
     }
 
     void compress_int8(){

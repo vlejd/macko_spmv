@@ -24,15 +24,10 @@ void compress_rows_cpu(
         COMPRESSOR_FOR(col, M_cols)
         {
             float val = __half2float(M[row * M_cols + col]);
-            if (val != 0.0 || delta == 15)
+            if (val != 0.0 || delta == 255)
             {
-                int delta_index = num_values / 2;
-                int delta_subindex = num_values % 2;
-                if (delta_subindex == 0)
-                {
-                    (*deltas)[delta_index] = 0;
-                }
-                (*deltas)[delta_index] += (delta) << (4 * delta_subindex);
+                int delta_index = num_values;
+                (*deltas)[delta_index] = delta;
                 (*values)[num_values] = val;
                 num_values += 1;
                 delta = 0;
@@ -48,16 +43,8 @@ void compress_rows_cpu(
         // Cleanup values and deltas that could be added as padding at the end of the row
         for (int i = last_non_zero; i < num_values; i++)
         {
-            int delta_index = i / 2;
-            int delta_subindex = i % 2;
-            if (delta_subindex == 0)
-            {
-                (*deltas)[delta_index] = 0;
-            }
-            else
-            {
-                (*deltas)[delta_index] = ((*deltas)[delta_index]) % 16;
-            }
+            int delta_index = i;
+            (*deltas)[delta_index] = 0;
             (*values)[i] = 0.0;
         }
 
@@ -69,7 +56,7 @@ void compress_rows_cpu(
     (*compressed_padded_size) = COMPRESSOR_UPDIV(num_values, 8) * 8;
 
     (*values) = (__half *)realloc(*values, (*compressed_padded_size) * sizeof(__half));
-    (*deltas) = (unsigned char *)realloc(*deltas, ((*compressed_padded_size) / 2) * sizeof(unsigned char));
+    (*deltas) = (unsigned char *)realloc(*deltas, (*compressed_padded_size) * sizeof(unsigned char));
 }
 
 void compress_rows_int8_cpu(
