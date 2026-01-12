@@ -247,8 +247,8 @@ void print_matrix(unsigned char *M, int M_rows, int M_cols)
         cout << "[";
         for (int c = 0; c < M_cols && c < max_size; c += 2)
         {
-            cout << (int(M[r * M_cols + c]) & 15) << ", ";
-            cout << (int(M[r * M_cols + c]) >> 4) << ", ";
+            cout << (int(M[r * M_cols + c/2]) & 15) << ", ";
+            cout << (int(M[r * M_cols + c/2]) >> 4) << ", ";
             if (c == max_size - 1)
             {
                 cout << "... \n";
