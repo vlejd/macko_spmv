@@ -681,7 +681,7 @@ public:
     float compute_effective_density()
     {
         double dense_bytes = M_cols * M_rows * 2;
-        double compresses_bytes = 2.5 * M_sparse_padded_size + M_cols * 4;
+        double compresses_bytes = 3 * M_sparse_padded_size + M_cols * 4;
         return compresses_bytes / dense_bytes;
     }
 
