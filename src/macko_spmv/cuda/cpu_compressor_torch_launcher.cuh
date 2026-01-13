@@ -32,7 +32,7 @@ std::tuple<torch::Tensor, torch::Tensor, torch::Tensor, int, int>
                        .device(torch::kCPU);
 
     at::Tensor t_values = torch::from_blob(values, {(long int)(M_sparse_padded_size)}, values_options).clone();
-    at::Tensor t_deltas = torch::from_blob(deltas, {(long int)(M_sparse_padded_size/2)}, deltas_options).clone();
+    at::Tensor t_deltas = torch::from_blob(deltas, {(long int)(M_sparse_padded_size)}, deltas_options).clone();
     at::Tensor t_row_indices = torch::from_blob(row_indices, {(long int)(M_rows+1)}, row_indices_options).clone();
 
     return std::make_tuple(t_values, t_deltas, t_row_indices, M.size(0), M.size(1));
