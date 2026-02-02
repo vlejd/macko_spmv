@@ -1,6 +1,10 @@
 #include <vector>
 #include <cuda_fp16.h>
 
+#include <torch/extension.h>
+
+#include "cpu_compressor.cuh"
+
 #define FORMATTER_UPDIV(a, b) (a + b - 1) / b
 
 std::tuple<torch::Tensor, torch::Tensor, torch::Tensor, int, int>

@@ -6,30 +6,28 @@ readme = "README.md"
 authors = [
     { name = "vlejd", email = "vladimir.v.macko@gmail.com" }
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.10"
 dependencies = [
-    "accelerate>=1.11.0",
-    "numpy>=2.3.4",
-    "torch==2.8.0",
-    "transformers==4.55",
+    "torch",
 ]
 
 [build-system]
-requires = ["uv_build>=0.9.2,<0.10.0"]
-build-backend = "uv_build"
+requires = ["setuptools", "wheel", "torch", "ninja", "numpy"]
+build-backend = "setuptools.build_meta"
 
 [project.optional-dependencies]
 dev = [
-    "fire>=0.7.1",
-    "ipykernel>=7.1.0",
-    "jinja2>=3.1.6",
-    "matplotlib>=3.10.7",
-    "pandas>=2.3.3",
-    "scipy>=1.16.3",
-    "seaborn>=0.13.2",
-    "shapely>=2.1.2",
-    "tabulate>=0.9.0",
-    "tqdm>=4.67.1",
+    "transformers==4.55",
+    "fire",
+    "ipykernel",
+    "jinja2",
+    "matplotlib",
+    "pandas",
+    "scipy",
+    "seaborn",
+    "shapely",
+    "tabulate",
+    "tqdm",
 ]
 
 test = [

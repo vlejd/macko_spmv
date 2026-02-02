@@ -33,7 +33,7 @@ void compress_rows_cpu(
                     (*deltas)[delta_index] = 0;
                 }
                 (*deltas)[delta_index] += (delta) << (4 * delta_subindex);
-                (*values)[num_values] = val;
+                (*values)[num_values] = __float2half(val);
                 num_values += 1;
                 delta = 0;
                 if (val != 0.0)
@@ -58,7 +58,7 @@ void compress_rows_cpu(
             {
                 (*deltas)[delta_index] = ((*deltas)[delta_index]) % 16;
             }
-            (*values)[i] = 0.0;
+            (*values)[i] = __float2half(0.0f);
         }
 
         num_values = last_non_zero;

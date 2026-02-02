@@ -1,4 +1,7 @@
 #include <ATen/cuda/CUDAContext.h>
+#include <torch/extension.h>
+
+#include "kernels.cuh"
 
 at::Tensor macko_spmv_launcher(
     at::Tensor M_values,
